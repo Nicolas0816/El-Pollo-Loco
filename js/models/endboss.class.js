@@ -1,32 +1,33 @@
-class Chicken extends MovableObject {
+class Endboss extends MovableObject {
+    
+    y=190;
 
-    y = 360;
-    height = 60;
-    width = 60;
     IMAGES_WALKING = [
-        'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-        'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-        'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png',
+        'img/4_enemie_boss_chicken/1_walk/G1.png',
+        'img/4_enemie_boss_chicken/1_walk/G2.png',
+        'img/4_enemie_boss_chicken/1_walk/G3.png',
+        'img/4_enemie_boss_chicken/1_walk/G4.png'
     ];
 
-    
+    height = 240;
+    width = 240;
 
     constructor(){
         super();
         this.loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.x = 400 + Math.random() * 400;
         this.loadImages(this.IMAGES_WALKING);
-        this.speed = 0.15 + Math.random() * 0.25;
+        this.speed = 0.15;
         this.animate();
     }
 
     animate(){
         setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
-        }, 1000 / 12);
-
-        this.moveLeft();
+        }, 1000 / 6);
         
-
+        this.moveLeft();
     }
+
+
 }
