@@ -1,6 +1,15 @@
 class Character extends MovableObject {
 
+    walkingSound = new Audio('audio/freesound_community-sand-walk-106366.mp3');
+
     y = 0;
+
+    offset = {
+        top: 130,
+        left: 25,
+        right: 35,
+        bottom: 15
+    };
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -53,12 +62,15 @@ class Character extends MovableObject {
         //Character movement direction
         setInterval(() => {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.x += 4;
-                this.otherDirection = false;
+                this.moveRight();
             }
             if (this.world.keyboard.LEFT && this.x > 0) {
-                this.x -= 4;
+                this.moveLeft('character');
                 this.otherDirection = true;
+            }
+
+            if(this.world.keyboard.UP && !this.isAboveGround()){
+                this.jump();
             }
             this.world.camera_x = -this.x + 100;
 
@@ -76,8 +88,7 @@ class Character extends MovableObject {
                     this.playAnimation(this.IMAGES_IDLE);
                 }
             }
-        },1000 / 12);
-
+        },1000 / 8);
     }
 
     animateIdle(){
@@ -85,9 +96,5 @@ class Character extends MovableObject {
         let path = this.IMAGES_IDLE[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-    }
-
-    jump(){
-
     }
 }

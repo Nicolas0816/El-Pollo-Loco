@@ -10,12 +10,19 @@ class MovableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 1;
+    offset = {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    };
 
     applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround())
-            this.y -= this.speedY;
-            this.speedY -= this.acceleration;
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }
         },1000 / 40);
     }
 
@@ -41,13 +48,18 @@ class MovableObject {
     }
 
     moveRight() {
-        console.log('Moving right');
+        this.x += 5;
+        this.otherDirection = false;
     }
 
-    moveLeft(){
-        setInterval(() => {
+    moveLeft(object){
+        if(object === 'enemies'){
             this.x -= this.speed;
-        },1000 / 60);
+        }
+
+        if(object === 'character'){
+            this.x -= 5;
+        }
     }
 
     playAnimation(images){
@@ -55,5 +67,30 @@ class MovableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
+
+    jump() {
+        this.speedY = 22;
+    }
+
+    draw(ctx){
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    drawFrame(ctx){
+        if(this instanceof Character || this instanceof Chicken || this instanceof Endboss){
+            ctx.beginPath();
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x + this.offset.left, this.y + this.offset.top, this.width - this.offset.left - this.offset.right, this.height - this.offset.top - this.offset.bottom);
+            ctx.stroke();
+        }
+    }
+
+    isColliding(mo){
+        return this.x + this.width > mo.x &&
+               this.y + this.height > mo.y &&
+               this.x < mo.x + mo.width &&
+               this.y < mo.y + mo.height;
     }
 }
