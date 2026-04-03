@@ -11,6 +11,8 @@ class Character extends MovableObject {
         bottom: 15
     };
 
+    energy = 100;
+
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -45,6 +47,22 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/J-39.png'
     ];
 
+    IMAGES_DEAD = [
+        'img/2_character_pepe/5_dead/D-51.png',
+        'img/2_character_pepe/5_dead/D-52.png',
+        'img/2_character_pepe/5_dead/D-53.png',
+        'img/2_character_pepe/5_dead/D-54.png',
+        'img/2_character_pepe/5_dead/D-55.png',
+        'img/2_character_pepe/5_dead/D-56.png',
+        'img/2_character_pepe/5_dead/D-57.png'
+    ];
+
+    IMAGES_HURT = [
+        'img/2_character_pepe/4_hurt/H-41.png',
+        'img/2_character_pepe/4_hurt/H-42.png',
+        'img/2_character_pepe/4_hurt/H-43.png'
+    ];
+
     world;
 
     constructor() {
@@ -53,6 +71,8 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_JUMPING);
+        this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_HURT);
         this.x = 120;
         this.animate();
         this.applyGravity();
@@ -61,6 +81,9 @@ class Character extends MovableObject {
     animate(){
         //Character movement direction
         setInterval(() => {
+            if (this.isDead()) {
+                return; // Block movement when dead
+            }
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
             }
@@ -78,17 +101,19 @@ class Character extends MovableObject {
 
         //Walk animation
         setInterval(() => {
-
-            if (this.isAboveGround()) {
+            if (this.isDead()) {
+            this.playDeadAnimationOnce();
+            return; // Block other animations when dead
+            } else if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            }else{
-                if (this.world.keyboard.RIGHT ||this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                } else {
-                    this.playAnimation(this.IMAGES_IDLE);
-                }
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_WALKING);
+            } else {
+                this.playAnimation(this.IMAGES_IDLE);
             }
-        },1000 / 8);
+        }, 1000 / 8);
     }
 
     animateIdle(){
