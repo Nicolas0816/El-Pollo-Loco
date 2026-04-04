@@ -15,15 +15,21 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
     }
 
     setWorld(){
         this.character.world = this;
     }
 
-    checkCollisions(){
+    run(){
         setInterval(() => {
+            this.checkCollisions();
+            this.throwBottle();
+        }, 1000 / 10);
+    }
+
+    checkCollisions(){
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
@@ -31,7 +37,14 @@ class World {
                     this.healthBar.setPercentage(this.character.energy);
                 }
             });
-        }, 200);
+    }
+
+    throwBottle(){
+        if(this.keyboard.SPACE){
+            this.bottles = new ThrowableObject(this.character.x + 50, this.character.y + 150);
+            this.level.bottle.push(this.bottles);
+            this.keyboard.SPACE = false; // Prevent continuous throwing while space is held down  
+        }
     }
 
     draw() {
@@ -43,6 +56,7 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottle);
         
         //Statusbar should not move with camera
         this.ctx.translate(-this.camera_x, 0);
