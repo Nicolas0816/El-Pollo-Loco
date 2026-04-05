@@ -12,6 +12,8 @@ class Character extends MovableObject {
     };
 
     energy = 100;
+    coins = 0;
+    bottlesInInventory = 5;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -121,4 +123,15 @@ class Character extends MovableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
     }
+
+    collectCoin(){
+        this.coins += 1;
+    }
+
+    collectBottle(){
+        if(this.bottlesInInventory < 5){
+            this.bottlesInInventory = 5;
+        }
+    }
+
 }

@@ -45,12 +45,19 @@ const level1 = new Level(
         new Coin(1500),
         new Coin(1700),
         new Coin(1900),
-        new Coin(2100),
-        new Coin(2300)
+        new Coin(2100)
     ],
 
     [ 
         new ThrowableObject()
+    ],
+
+    [
+        new CollectableBottles(400, 300),
+        new CollectableBottles(800, 300),
+        new CollectableBottles(1200, 300),
+        new CollectableBottles(1600, 300),
+        new CollectableBottles(2000, 300)
     ]
 );
 

@@ -3,6 +3,13 @@ class Coin extends MovableObject {
     height = 100;
     y = 300;
 
+    offset = {
+        top: 35,
+        left: 35,
+        right: 35,
+        bottom: 35
+    };
+
     IMAGES_IDLE = [
         'img/8_coin/coin_1.png',
         'img/8_coin/coin_2.png'

@@ -9,6 +9,8 @@ class Endboss extends MovableObject {
         bottom: 10
     };
 
+    energy = 300;
+
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -38,5 +40,7 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
     }
 
-
+    hit(){
+        this.energy -= 100;
+    }
 }
