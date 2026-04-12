@@ -1,5 +1,15 @@
 class Endboss extends MovableObject {
     
+    world;
+    isActivated = false;
+    walkInterval = null;
+    animationInterval = null;
+    alertInterval = null;
+    walkInterval = null;
+    animationInterval = null;
+    phaseInterval = null;
+    animationState = "walk";
+
     y = 190;
 
     offset = {
@@ -9,7 +19,7 @@ class Endboss extends MovableObject {
         bottom: 10
     };
 
-    energy = 300;
+    energy = 500;
 
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -18,26 +28,97 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/1_walk/G4.png'
     ];
 
+    IMAGES_ALERT = [
+        'img/4_enemie_boss_chicken/2_alert/G5.png',
+        'img/4_enemie_boss_chicken/2_alert/G6.png',
+        'img/4_enemie_boss_chicken/2_alert/G7.png',
+        'img/4_enemie_boss_chicken/2_alert/G8.png',
+        'img/4_enemie_boss_chicken/2_alert/G9.png',
+        'img/4_enemie_boss_chicken/2_alert/G10.png',
+        'img/4_enemie_boss_chicken/2_alert/G11.png',
+        'img/4_enemie_boss_chicken/2_alert/G12.png'
+    ];
+
+    IMAGES_ATTACK = [
+        'img/4_enemie_boss_chicken/3_attack/G13.png',
+        'img/4_enemie_boss_chicken/3_attack/G14.png',
+        'img/4_enemie_boss_chicken/3_attack/G15.png',
+        'img/4_enemie_boss_chicken/3_attack/G16.png',
+        'img/4_enemie_boss_chicken/3_attack/G17.png',
+        'img/4_enemie_boss_chicken/3_attack/G18.png',
+        'img/4_enemie_boss_chicken/3_attack/G19.png',
+        'img/4_enemie_boss_chicken/3_attack/G20.png'
+    ];
+
     height = 240;
     width = 240;
 
     constructor(){
         super();
         this.loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
-        this.x = 400 + Math.random() * 400;
+        this.x = 2600
         this.loadImages(this.IMAGES_WALKING);
-        this.speed = 0.15;
-        this.animate();
+        this.loadImages(this.IMAGES_ALERT);
+        this.loadImages(this.IMAGES_ATTACK);
+        this.speed = 0.10;
+        this.watchForCameraContact();
     }
 
-    animate(){
+    watchForCameraContact() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
+            if (!this.world || this.isActivated) return;
+
+            const cameraLeft = -this.world.camera_x;
+            const cameraRight = cameraLeft + this.world.canvas.width;
+
+            if (this.x < cameraRight + 100) {
+            this.activate();
+            }
+        }, 1000 / 20);
+    }
+
+    activate() {
+        this.isActivated = true;
+        this.alertAnimation();
+
+        setTimeout(() => {
+            this.startPattern();
+        }, 2000);
+    }
+
+   alertAnimation() {
+        if (this.alertInterval) return;
+
+        this.alertInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_ALERT);
         }, 1000 / 6);
-        
-        setInterval(() => {
-            this.moveLeft('enemies');
+    }
+
+    startPattern() {
+        clearInterval(this.alertInterval);
+        this.alertInterval = null;
+
+        this.animationState = "walk";
+        this.currentImage = 0;
+
+        this.animationInterval = setInterval(() => {
+            if (this.animationState === "walk") {
+            this.playAnimation(this.IMAGES_WALKING);
+            } else {
+            this.playAnimation(this.IMAGES_ATTACK);
+            }
+        }, 1000 / 6);
+
+        this.walkInterval = setInterval(() => {
+            if (this.animationState === "walk") {
+            this.moveLeft("enemies");
+            }
         }, 1000 / 60);
+
+        this.phaseInterval = setInterval(() => {
+            this.animationState = this.animationState === "walk" ? "attack" : "walk";
+            this.currentImage = 0;
+        }, 1200);
     }
 
     hit(){

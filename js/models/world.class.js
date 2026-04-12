@@ -15,12 +15,16 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        this.checkStompCollisions();
         this.allCollisions();
         this.checkPressedKey();
     }
 
     setWorld(){
         this.character.world = this;
+        this.level.enemies.forEach((enemy) => {
+            enemy.world = this;
+        });
     }
 
     allCollisions(){
@@ -30,6 +34,12 @@ class World {
             this.chickensHitByBottle();
             this.collectBottle();
         }, 100);
+    }
+
+    checkStompCollisions(){
+        setInterval(() => {
+            this.jumpOnEnemy();
+        }, 1000 / 60);
     }
 
     checkPressedKey(){
@@ -46,6 +56,20 @@ class World {
                     this.healthBar.setPercentage(this.character.energy);
                 }
             });
+    }
+
+    jumpOnEnemy(){
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isCollidingOnTop(enemy) && this.character.speedY < 0 && !this.character.isHurt()) {
+                enemy.hit();
+                this.character.jump();
+                console.log('Jumped on enemy! Enemy energy: ' + enemy.energy);
+                if (enemy.energy <= 0) {
+                    const index = this.level.enemies.indexOf(enemy);
+                    if (index > -1) this.level.enemies.splice(index, 1);
+                }
+            }
+        });
     }
 
     throwBottle(){
