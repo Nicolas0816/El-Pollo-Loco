@@ -109,48 +109,57 @@ class Endboss extends MovableObject {
         }, 1000 / 6);
     }
 
-    startPattern() {
+    clearAllIntervals() {
         clearInterval(this.animationInterval);
         clearInterval(this.walkInterval);
         clearInterval(this.phaseInterval);
         clearInterval(this.alertInterval);
+    }
+
+    startPattern() {
+        this.clearAllIntervals();
         this.alertInterval = null;
 
         this.animationState = "walk";
         this.currentImage = 0;
 
-        this.animationInterval = setInterval(() => {
-            if (this.animationState === "walk") {
-            this.playAnimation(this.IMAGES_WALKING);
-            } else {
-            this.playAnimation(this.IMAGES_ATTACK);
-            }
-        }, 1000 / 6);
+        this.setAnimationInterval();
+        this.setWaltInterval();
+        this.setPhaseInterval();
+    }
 
-        this.walkInterval = setInterval(() => {
-            if (this.animationState === "walk") {
-            this.moveLeft("enemies");
-            }
-        }, 1000 / 60);
+    setAnimationInterval(){
+        return  this.animationInterval = setInterval(() => {
+                    if (this.animationState === "walk") {
+                    this.playAnimation(this.IMAGES_WALKING);
+                    } else {
+                    this.playAnimation(this.IMAGES_ATTACK);
+                    }
+                }, 1000 / 6);
+    }
 
-        this.phaseInterval = setInterval(() => {
-            this.animationState = this.animationState === "walk" ? "attack" : "walk";
-            this.currentImage = 0;
-        }, 1200);
+    setWaltInterval(){
+        return         this.walkInterval = setInterval(() => {
+                            if (this.animationState === "walk") {
+                            this.moveLeft("enemies");
+                            }
+                        }, 1000 / 60);
+    }
+
+    setPhaseInterval(){
+        return         this.phaseInterval = setInterval(() => {
+                            this.animationState = this.animationState === "walk" ? "attack" : "walk";
+                            this.currentImage = 0;
+                        }, 1200);
     }
 
     hurtAnimation() {
-        clearInterval(this.animationInterval);
-        clearInterval(this.walkInterval);
-        clearInterval(this.phaseInterval);
-
+        this.clearAllIntervals();
         this.animationState = "hurt";
         this.currentImage = 0;
-
         this.animationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 1000 / 6);
-
         setTimeout(() => {
             if (this.energy > 0) {
             this.startPattern();
@@ -159,25 +168,24 @@ class Endboss extends MovableObject {
     }
 
     dieAnimation() {
-        clearInterval(this.animationInterval);
-        clearInterval(this.walkInterval);
-        clearInterval(this.phaseInterval);
-        clearInterval(this.alertInterval);
+        this.clearAllIntervals();
         this.alertInterval = null;
-
         this.animationState = "dead";
         this.currentImage = 0;
         this.deadAnimationPlayed = false;
         this.deadFrameIndex = 0;
+        this.setDeadAnimationInterval();
+    }
 
-        this.animationInterval = setInterval(() => {
-            this.playDeadAnimationOnce();
+    setDeadAnimationInterval() {
+        return         this.animationInterval = setInterval(() => {
+                            this.playDeadAnimationOnce();
 
-            if (this.deadAnimationPlayed) {
-                clearInterval(this.animationInterval);
-                this.animationInterval = null;
-            }
-        }, 1000 / 6);
+                            if (this.deadAnimationPlayed) {
+                                clearInterval(this.animationInterval);
+                                this.animationInterval = null;
+                            }
+                        }, 1000 / 6);
     }
 
     hit(){

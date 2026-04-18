@@ -81,28 +81,20 @@ class Character extends MovableObject {
     }
 
     animate(){
-        //Character movement direction
         setInterval(() => {
-            if (this.isDead() || this.world.gameEnded) {
-                return; // Block movement when dead or game ended
-            }
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-            }
+            if (this.isDead() || this.world.gameEnded) {return; }
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {this.moveRight();}
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft('character');
                 this.otherDirection = true;
             }
-            if(this.world.keyboard.UP && !this.isAboveGround()){
-                this.jump();
-            }
+            if(this.world.keyboard.UP && !this.isAboveGround()){this.jump();}
             this.world.camera_x = -this.x + 100;
-
         },1000 / 60);
 
         //Walk animation
         setInterval(() => {
-            if (this.world.gameEnded) return; // Block animations when game ended
+            if (this.world.gameEnded && !this.isDead()) return; // Block animations when game ended
             if (this.isDead()) {
                 this.playDeadAnimationOnce();
                 return; // Block other animations when dead or game ended
@@ -112,9 +104,7 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
-            } else {
-                this.playAnimation(this.IMAGES_IDLE);
-            }
+            } else {this.playAnimation(this.IMAGES_IDLE);}
         }, 1000 / 8);
     }
 

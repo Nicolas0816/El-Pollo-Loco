@@ -3,6 +3,12 @@ let world
 let keyboard = new Keyboard();
 let gameStarted = false;
 
+let leftButton = document.getElementById('left-button');
+let rightButton = document.getElementById('right-button');
+let jumpButton = document.getElementById('jump-button');
+let throwButton = document.getElementById('throw-button');
+
+
 function startGame() {
     if (gameStarted) return;
     gameStarted = true;
@@ -11,6 +17,9 @@ function startGame() {
 
     const startScreen = document.getElementById("start-screen");
     if (startScreen) startScreen.classList.add("hidden");
+    
+    const mobileButtons = document.getElementById('mobile-buttons');
+    if (mobileButtons) mobileButtons.classList.add('game-started');
 }
 
 function init() {
@@ -61,6 +70,40 @@ document.addEventListener('keyup', (e) => {
         keyboard.SPACE = false;
     }
 
+} );
+
+document.addEventListener('touchstart', (e) => {
+    console.log(e);
+    
+    if(e.target == rightButton){
+        keyboard.RIGHT = true;
+    }
+    if(e.target == leftButton){
+        keyboard.LEFT = true;
+    }
+    if(e.target == jumpButton){
+        keyboard.UP = true;
+    }
+    if(e.target == throwButton){
+        keyboard.SPACE = true;
+    }
+} );
+
+document.addEventListener('touchend', (e) => {
+    console.log(e);
+    
+    if(e.target == rightButton){
+        keyboard.RIGHT = false;
+    }
+    if(e.target == leftButton){
+        keyboard.LEFT = false;
+    }
+    if(e.target == jumpButton){
+        keyboard.UP = false;
+    }
+    if(e.target == throwButton){
+        keyboard.SPACE = false;
+    }
 } );
 
 function restartGame() {

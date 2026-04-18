@@ -22,9 +22,18 @@ body {
 
 #game-screen {
     position: relative;
-    width: 720px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 720px;
     aspect-ratio: 3 / 2;
+    max-height: 100vh;
+    margin: 0 auto;
+}
+
+#game-screen canvas {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    display: block;
 }
 
 #start-screen {
@@ -41,12 +50,6 @@ body {
 
 #start-screen.hidden {
     display: none;
-}
-
-#game-screen canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
 }
 
 #game-over{
@@ -84,83 +87,36 @@ body {
     display: none;
 }
 
-
-@media only screen and (max-width: 1024px) {
-    h1{
-        display: none;
-    }
-}
-
 @media only screen and (max-width: 720px) {
     canvas {
         width: 100%;
     }
 }
 
-@media only screen and (max-height: 480px) {
-    canvas{
-        height: 100vh;
-    }
-}
-
 @media only screen and (orientation: landscape) and (max-width: 1024px) {
-    h1{
+    h1 {
         display: none;
     }
-   
+
     #game-screen {
-        max-width: 720px; /* Volle Breite */
-        max-height: 480px; /* Volle Höhe */
-        max-width: none; /* Entferne die Breitenbegrenzung */
-        aspect-ratio: none; /* Entferne das feste Seitenverhältnis */
-    }
-
-    #game-screen canvas {
-        width: 100%; /* Passe an den Container an */
-        height: 100%;
-        object-fit: contain; /* Skaliere ohne Verzerrung, behalte Seitenverhältnis */
-    }
-
-    #start-screen img {
-        object-fit: contain; /* Verhindere Abschneiden – skaliere das Bild, um es vollständig zu zeigen */
-        background-color: black; /* Optional: Hintergrund, falls das Bild nicht den ganzen Bereich füllt */
-    }
-}
-
-/* Fallback: Nur auf Geräten mit kleiner Höhe (z. B. Tablets im Landscape) */
-@media only screen and (max-height: 600px) and (orientation: landscape) {
-    #game-screen {
-        max-width: 720px; /* Volle Breite */
-        max-height: 480px; /* Volle Höhe */
-        max-width: none;
-        aspect-ratio: none;
+        width: 100%;
+        max-width: 720px;
+        max-height: 100vh;
     }
 
     #game-screen canvas {
         width: 100%;
-        height: 100%;
-        object-fit: contain;
+        height: auto;
+        max-height: 100vh;
     }
 
     #start-screen img {
         object-fit: contain;
         background-color: black;
     }
-}
 
-/* Fallback für Browser ohne orientation-Support: Breite > Höhe */
-@media only screen and (min-aspect-ratio: 1/1) {
-    #game-screen {
-        max-width: 720px; /* Volle Breite */
-        max-height: 480px; /* Volle Höhe */
-        max-width: none;
-        aspect-ratio: none;
-    }
-
-    #game-screen canvas {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+    #mobile-buttons.game-started {
+        display: flex; /* Zeige nur wenn Klasse vorhanden */
     }
 }
 
@@ -201,4 +157,33 @@ body {
 
 .overlay-content img {
     width: 50px; /* Optional: Icon-Größe */
+}
+
+#mobile-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    bottom: 8px;
+    z-index: 999;
+    display: none; /* Verstecke standardmäßig */
+}
+
+#mobile-buttons.game-started {
+    /* Zusätzliche Klasse für Sichtbarkeit */
+}
+
+#mobile-buttons-right, #mobile-buttons-left {
+    display: flex;
+    width: 100%;
+    gap: 12px;
+}
+
+#mobile-buttons-right img, #mobile-buttons-left img {
+    width: 70px; /* Optional: Button-Größe */
+}
+
+#mobile-buttons-right {
+    justify-content: flex-end;
 }

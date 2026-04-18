@@ -136,10 +136,7 @@ class World {
 
                     enemy.hit();
 
-                    setTimeout(() => {
-                        const bottleIndex = this.level.bottle.indexOf(bottle);
-                        if (bottleIndex > -1) this.level.bottle.splice(bottleIndex, 1);
-                    }, 250);
+                    this.removeBottleFromInventory(bottle);
 
                     if (enemy instanceof Endboss) {
                         const percentage = Math.max(0, (enemy.energy / 500) * 100);
@@ -147,23 +144,24 @@ class World {
                     }
                     if (enemy instanceof Endboss && enemy.isDead()) {
                         this.endGame('win');
-}
+                    }
                 }
             });   
         });
+    }
+
+    removeBottleFromInventory(bottle) {
+        return       setTimeout(() => {
+                        const bottleIndex = this.level.bottle.indexOf(bottle);
+                        if (bottleIndex > -1) this.level.bottle.splice(bottleIndex, 1);
+                    }, 250);
     }
 
 draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
 
-    this.addObjectsToMap(this.level.backgroundObjects);
-    this.addObjectsToMap(this.level.clouds);
-    this.addToMap(this.character);
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottle);
-    this.addObjectsToMap(this.level.collectableBottles);
+        this.addObjectsToMap(this.addGameObjectsToMap());
     
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
@@ -180,6 +178,16 @@ draw() {
     requestAnimationFrame(() => { self.draw(); });
 }
 
+addGameObjectsToMap(){
+    return [...this.level.backgroundObjects,
+            ...this.level.clouds,
+            ...this.level.enemies,
+            ...this.level.coins, 
+            ...this.level.collectableBottles, 
+            ...this.level.bottle, 
+            this.character];
+}
+
     addObjectsToMap(objects){
         objects.forEach(o => {
             this.addToMap(o);
@@ -191,9 +199,7 @@ draw() {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-
         mo.drawFrame(this.ctx);
-
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }
@@ -214,25 +220,42 @@ draw() {
     endGame(result) {
         if (this.gameEnded) return;
         this.gameEnded = true;
+        this.waitForAnimationAndShowOverlay(result);
+    }
 
-        // Warte bis die Animation fertig ist
+    waitForAnimationAndShowOverlay(result) {
         const checkAnimationDone = setInterval(() => {
-            let animationDone = false;
-
-            if (result === 'lose') {
-                animationDone = this.character.deadAnimationPlayed === true;
-            } else if (result === 'win') {
-                const endboss = this.getEndboss();
-                animationDone = endboss && endboss.deadAnimationPlayed === true;
-            }
-
-            if (animationDone) {
+            if (this.isAnimationDone(result)) {
                 clearInterval(checkAnimationDone);
-                this.deactivateKeyboard();
-                document.getElementById('game-over').classList.toggle('hidden', result !== 'lose');
-                document.getElementById('you-won').classList.toggle('hidden', result !== 'win');
+                this.onGameEndAnimationComplete(result);
             }
         }, 100);
+    }
+
+    isAnimationDone(result) {
+        if (result === 'lose') {
+            return this.character.deadAnimationPlayed === true;
+        } else if (result === 'win') {
+            const endboss = this.getEndboss();
+            return endboss && endboss.deadAnimationPlayed === true;
+        }
+        return false;
+    }
+
+    onGameEndAnimationComplete(result) {
+        this.deactivateKeyboard();
+        this.showGameOverScreen(result);
+        this.hideGameStartedButtons();
+    }
+
+    showGameOverScreen(result) {
+        document.getElementById('game-over').classList.toggle('hidden', result !== 'lose');
+        document.getElementById('you-won').classList.toggle('hidden', result !== 'win');
+    }
+
+    hideGameStartedButtons() {
+        const mobileButtons = document.getElementById('mobile-buttons');
+        if (mobileButtons) mobileButtons.classList.remove('game-started');
     }
 
     deactivateKeyboard() {
