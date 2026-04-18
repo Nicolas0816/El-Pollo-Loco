@@ -55,21 +55,21 @@ class MovableObject extends DrawableObject {
     }
  
     playDeadAnimationOnce() {
-    if (this.deadAnimationPlayed) {
-        // hold on last Frame of death animation
-        const last = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
-        this.img = this.imageCache[last];
-        return;
-    }
+        if (this.deadAnimationPlayed) {
+            // hold on last Frame of death animation
+            const last = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
+            this.img = this.imageCache[last];
+            return;
+        }
 
-    const path = this.IMAGES_DEAD[this.deadFrameIndex];
-    this.img = this.imageCache[path];
-    this.deadFrameIndex++;
+        const path = this.IMAGES_DEAD[this.deadFrameIndex];
+        this.img = this.imageCache[path];
+        this.deadFrameIndex++;
 
-    if (this.deadFrameIndex >= this.IMAGES_DEAD.length) {
-        this.deadAnimationPlayed = true;
+        if (this.deadFrameIndex >= this.IMAGES_DEAD.length) {
+            this.deadAnimationPlayed = true;
+        }
     }
-}
 
     jump() {
         this.speedY = 22;

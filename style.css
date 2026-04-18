@@ -1,11 +1,204 @@
+@font-face {
+    font-family: Danfo;
+    src: url(./fonts/Danfo-Regular-VariableFont_ELSH.ttf);
+}
+
 body {
     display: flex;
+    margin: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    background-image: url(./img/0_page_background/desert.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: Danfo;
+    font-size: 40px;
+    color: white;
+    letter-spacing: 4px;
+    text-shadow: 0px 10px 2px rgba(0, 0, 0, 0.7);
 }
 
-canvas {
-    background-color: black;
+#game-screen {
+    position: relative;
+    width: 720px;
+    max-width: 100%;
+    aspect-ratio: 3 / 2;
+}
+
+#start-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+#start-screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#start-screen.hidden {
+    display: none;
+}
+
+#game-screen canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#game-over{
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+}
+
+#you-won{
+    position: absolute;
+    inset: 0;
+    z-index: 22;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+}
+
+#you-won img, #game-over img {
+    width: 50%;
+    height: auto;
+}
+
+#game-over.hidden, #you-won.hidden {
+    display: none;
+}
+
+
+@media only screen and (max-width: 1024px) {
+    h1{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas{
+        height: 100vh;
+    }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 1024px) {
+    h1{
+        display: none;
+    }
+   
+    #game-screen {
+        max-width: 720px; /* Volle Breite */
+        max-height: 480px; /* Volle Höhe */
+        max-width: none; /* Entferne die Breitenbegrenzung */
+        aspect-ratio: none; /* Entferne das feste Seitenverhältnis */
+    }
+
+    #game-screen canvas {
+        width: 100%; /* Passe an den Container an */
+        height: 100%;
+        object-fit: contain; /* Skaliere ohne Verzerrung, behalte Seitenverhältnis */
+    }
+
+    #start-screen img {
+        object-fit: contain; /* Verhindere Abschneiden – skaliere das Bild, um es vollständig zu zeigen */
+        background-color: black; /* Optional: Hintergrund, falls das Bild nicht den ganzen Bereich füllt */
+    }
+}
+
+/* Fallback: Nur auf Geräten mit kleiner Höhe (z. B. Tablets im Landscape) */
+@media only screen and (max-height: 600px) and (orientation: landscape) {
+    #game-screen {
+        max-width: 720px; /* Volle Breite */
+        max-height: 480px; /* Volle Höhe */
+        max-width: none;
+        aspect-ratio: none;
+    }
+
+    #game-screen canvas {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    #start-screen img {
+        object-fit: contain;
+        background-color: black;
+    }
+}
+
+/* Fallback für Browser ohne orientation-Support: Breite > Höhe */
+@media only screen and (min-aspect-ratio: 1/1) {
+    #game-screen {
+        max-width: 720px; /* Volle Breite */
+        max-height: 480px; /* Volle Höhe */
+        max-width: none;
+        aspect-ratio: none;
+    }
+
+    #game-screen canvas {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+#orientation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255); /* Dunkler Hintergrund */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Über allem anderen */
+    color: black;
+    font-family: sans-serif;
+    text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.7);
+}
+
+#orientation-overlay.hidden {
+    display: none;
+}
+
+.overlay-content {
+    text-align: center;
+    max-width: 300px;
+}
+
+.overlay-content h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.overlay-content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.overlay-content img {
+    width: 50px; /* Optional: Icon-Größe */
 }

@@ -7,12 +7,31 @@
 
     <link rel="stylesheet" href="./style.css">
 </head>
-<body onload="init()">
+<body>
     <h1>El Pollo Loco</h1>
 
-    <canvas id="canvas" width="720px" height="480px">
+    <div id="game-screen">
+        <div onclick="startGame()"  id="start-screen">
+            <img src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="start-screen">
+        </div>
 
-    </canvas>
+        <canvas id="canvas" width="720px" height="480px">
+        </canvas>
+
+        <div onclick="restartGame()" id="game-over" class="hidden">
+            <img src="./img/You won, you lost/Game over A.png" alt="Game Over">
+        </div>
+        <div onclick="restartGame()" id="you-won" class="hidden">
+            <img src="./img/You won, you lost/You won A.png" alt="You Won">
+        </div>
+    </div>
+
+    <div id="orientation-overlay" class="hidden">
+        <div class="overlay-content">
+            <img src="img/rotate-smartphone.png" alt="Turn-Device-Symbol" />
+            <h2>Please turn your device</h2>
+        </div>
+    </div>
 
     <script src="./js/models/drawable-object.class.js"></script>
     <script src="./js/models/movable-object.class.js"></script>
@@ -27,6 +46,7 @@
     <script src="./js/models/healthbar.class.js"></script>
     <script src="./js/models/coinbar.class.js"></script>
     <script src="./js/models/bottlebar.class.js"></script>
+    <script src="./js/models/endboss-healthbar.class.js"></script>
     <script src="./js/models/clouds.class.js"></script>
     <script src="./js/models/background-object.class.js"></script>
     <script src="./js/models/keyboard.class.js"></script>

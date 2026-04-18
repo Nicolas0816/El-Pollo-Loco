@@ -6,6 +6,7 @@ class DrawableObject {
     width = 120;
     imageCache = {};
     currentImage = 0;
+    isVisible = false;
 
     loadImage(path) {
         this.img = new Image(); 

@@ -50,6 +50,18 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/3_attack/G20.png'
     ];
 
+    IMAGES_HURT = [
+        'img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png'
+    ];
+
+     IMAGES_DEAD = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png'
+    ];
+
     height = 240;
     width = 240;
 
@@ -60,6 +72,8 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_DEAD);
         this.speed = 0.10;
         this.watchForCameraContact();
     }
@@ -79,6 +93,7 @@ class Endboss extends MovableObject {
 
     activate() {
         this.isActivated = true;
+        this.world.endbossHealthBar.isVisible = true;
         this.alertAnimation();
 
         setTimeout(() => {
@@ -95,6 +110,9 @@ class Endboss extends MovableObject {
     }
 
     startPattern() {
+        clearInterval(this.animationInterval);
+        clearInterval(this.walkInterval);
+        clearInterval(this.phaseInterval);
         clearInterval(this.alertInterval);
         this.alertInterval = null;
 
@@ -121,7 +139,55 @@ class Endboss extends MovableObject {
         }, 1200);
     }
 
+    hurtAnimation() {
+        clearInterval(this.animationInterval);
+        clearInterval(this.walkInterval);
+        clearInterval(this.phaseInterval);
+
+        this.animationState = "hurt";
+        this.currentImage = 0;
+
+        this.animationInterval = setInterval(() => {
+            this.playAnimation(this.IMAGES_HURT);
+        }, 1000 / 6);
+
+        setTimeout(() => {
+            if (this.energy > 0) {
+            this.startPattern();
+            }
+        }, 1000);
+    }
+
+    dieAnimation() {
+        clearInterval(this.animationInterval);
+        clearInterval(this.walkInterval);
+        clearInterval(this.phaseInterval);
+        clearInterval(this.alertInterval);
+        this.alertInterval = null;
+
+        this.animationState = "dead";
+        this.currentImage = 0;
+        this.deadAnimationPlayed = false;
+        this.deadFrameIndex = 0;
+
+        this.animationInterval = setInterval(() => {
+            this.playDeadAnimationOnce();
+
+            if (this.deadAnimationPlayed) {
+                clearInterval(this.animationInterval);
+                this.animationInterval = null;
+            }
+        }, 1000 / 6);
+    }
+
     hit(){
+        if (this.isDead()) return;
         this.energy -= 100;
+        if (this.energy < 0) this.energy = 0;
+        if (this.energy > 0) {
+            this.hurtAnimation();
+        } else {
+            this.dieAnimation();
+        }
     }
 }

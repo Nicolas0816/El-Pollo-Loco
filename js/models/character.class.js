@@ -83,8 +83,8 @@ class Character extends MovableObject {
     animate(){
         //Character movement direction
         setInterval(() => {
-            if (this.isDead()) {
-                return; // Block movement when dead
+            if (this.isDead() || this.world.gameEnded) {
+                return; // Block movement when dead or game ended
             }
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
@@ -102,9 +102,10 @@ class Character extends MovableObject {
 
         //Walk animation
         setInterval(() => {
+            if (this.world.gameEnded) return; // Block animations when game ended
             if (this.isDead()) {
-            this.playDeadAnimationOnce();
-            return; // Block other animations when dead
+                this.playDeadAnimationOnce();
+                return; // Block other animations when dead or game ended
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {

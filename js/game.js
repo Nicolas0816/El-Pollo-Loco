@@ -1,8 +1,20 @@
 let canvas;
 let world
 let keyboard = new Keyboard();
+let gameStarted = false;
+
+function startGame() {
+    if (gameStarted) return;
+    gameStarted = true;
+
+    init();
+
+    const startScreen = document.getElementById("start-screen");
+    if (startScreen) startScreen.classList.add("hidden");
+}
 
 function init() {
+    level1 = initLevel();
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
     console.log('My character is', world.character);
@@ -50,3 +62,51 @@ document.addEventListener('keyup', (e) => {
     }
 
 } );
+
+function restartGame() {
+    // State zurücksetzen
+    gameStarted = false;
+    
+    // Alte Welt stoppen und entfernen (falls vorhanden)
+    if (world) {
+        // Hier könntest du später eine Methode wie world.stopAllIntervals() hinzufügen,
+        // um alle setInterval-Aufrufe in der World-Klasse zu stoppen.
+        // Für jetzt: Setze world auf null, um Speicher freizugeben.
+        world.stopAllIntervals();
+        world = null;
+    }
+    
+    // Overlays verstecken
+    const gameOver = document.getElementById('game-over');
+    const youWon = document.getElementById('you-won');
+    if (gameOver) gameOver.classList.add('hidden');
+    if (youWon) youWon.classList.add('hidden');
+    
+    // Start-Screen anzeigen (damit der Spieler erneut starten kann)
+    const startScreen = document.getElementById('start-screen');
+    if (startScreen) startScreen.classList.remove('hidden');
+    
+    // Hinweis: Die Welt wird NICHT hier neu initialisiert.
+    // Stattdessen wartet das Spiel, bis der Spieler erneut auf den Start-Screen klickt,
+    // was startGame() aufruft und init() triggert – das erstellt eine frische World mit neuen Gegnern.
+}
+
+// Funktion, um die Orientierung zu prüfen (Breite vs. Höhe)
+function checkOrientation() {
+    const isPortrait = document.body.clientWidth < document.body.clientHeight;
+    console.log('Breite:', document.body.clientWidth, 'Höhe:', document.body.clientHeight, 'isPortrait:', isPortrait); // Debug-Log
+
+    const overlay = document.getElementById('orientation-overlay');
+    if (isPortrait) {
+        overlay.classList.remove('hidden');
+    } else {
+        overlay.classList.add('hidden');
+    }
+}
+
+// Initiale Prüfung beim Laden
+checkOrientation();
+
+// Event-Listener
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
