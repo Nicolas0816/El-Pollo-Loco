@@ -1,67 +1,40 @@
 class Character extends MovableObject {
-
-    walkingSound = new Audio('audio/freesound_community-sand-walk-106366.mp3');
-
     y = 0;
-
-    offset = {
-        top: 130,
-        left: 25,
-        right: 35,
-        bottom: 15
-    };
-
+    offset = { top: 130, left: 25, right: 35, bottom: 15 };
     energy = 100;
     coins = 0;
     bottlesInInventory = 5;
+    isWalking = false;
+    jumpSoundPlayed = false;
+    keyboard = new Keyboard();
 
     IMAGES_WALKING = [
-        'img/2_character_pepe/2_walk/W-21.png',
-        'img/2_character_pepe/2_walk/W-22.png',
-        'img/2_character_pepe/2_walk/W-23.png',
-        'img/2_character_pepe/2_walk/W-24.png',
-        'img/2_character_pepe/2_walk/W-25.png',
-        'img/2_character_pepe/2_walk/W-26.png'
+        'img/2_character_pepe/2_walk/W-21.png', 'img/2_character_pepe/2_walk/W-22.png',
+        'img/2_character_pepe/2_walk/W-23.png', 'img/2_character_pepe/2_walk/W-24.png',
+        'img/2_character_pepe/2_walk/W-25.png', 'img/2_character_pepe/2_walk/W-26.png'
     ];
-
     IMAGES_IDLE = [
-        'img/2_character_pepe/1_idle/idle/I-1.png',
-        'img/2_character_pepe/1_idle/idle/I-2.png',
-        'img/2_character_pepe/1_idle/idle/I-3.png',
-        'img/2_character_pepe/1_idle/idle/I-4.png',
-        'img/2_character_pepe/1_idle/idle/I-5.png',
-        'img/2_character_pepe/1_idle/idle/I-6.png',
-        'img/2_character_pepe/1_idle/idle/I-7.png',
-        'img/2_character_pepe/1_idle/idle/I-8.png',
-        'img/2_character_pepe/1_idle/idle/I-9.png',
-        'img/2_character_pepe/1_idle/idle/I-10.png'
-    ]
-
+        'img/2_character_pepe/1_idle/idle/I-1.png', 'img/2_character_pepe/1_idle/idle/I-2.png',
+        'img/2_character_pepe/1_idle/idle/I-3.png', 'img/2_character_pepe/1_idle/idle/I-4.png',
+        'img/2_character_pepe/1_idle/idle/I-5.png', 'img/2_character_pepe/1_idle/idle/I-6.png',
+        'img/2_character_pepe/1_idle/idle/I-7.png', 'img/2_character_pepe/1_idle/idle/I-8.png',
+        'img/2_character_pepe/1_idle/idle/I-9.png', 'img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
     IMAGES_JUMPING = [
-        'img/2_character_pepe/3_jump/J-31.png',
-        'img/2_character_pepe/3_jump/J-32.png',
-        'img/2_character_pepe/3_jump/J-33.png',
-        'img/2_character_pepe/3_jump/J-34.png',
-        'img/2_character_pepe/3_jump/J-35.png',
-        'img/2_character_pepe/3_jump/J-36.png',
-        'img/2_character_pepe/3_jump/J-37.png',
-        'img/2_character_pepe/3_jump/J-38.png',
+        'img/2_character_pepe/3_jump/J-31.png', 'img/2_character_pepe/3_jump/J-32.png',
+        'img/2_character_pepe/3_jump/J-33.png', 'img/2_character_pepe/3_jump/J-34.png',
+        'img/2_character_pepe/3_jump/J-35.png', 'img/2_character_pepe/3_jump/J-36.png',
+        'img/2_character_pepe/3_jump/J-37.png', 'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png'
     ];
-
     IMAGES_DEAD = [
-        'img/2_character_pepe/5_dead/D-51.png',
-        'img/2_character_pepe/5_dead/D-52.png',
-        'img/2_character_pepe/5_dead/D-53.png',
-        'img/2_character_pepe/5_dead/D-54.png',
-        'img/2_character_pepe/5_dead/D-55.png',
-        'img/2_character_pepe/5_dead/D-56.png',
+        'img/2_character_pepe/5_dead/D-51.png', 'img/2_character_pepe/5_dead/D-52.png',
+        'img/2_character_pepe/5_dead/D-53.png', 'img/2_character_pepe/5_dead/D-54.png',
+        'img/2_character_pepe/5_dead/D-55.png', 'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
     ];
-
     IMAGES_HURT = [
-        'img/2_character_pepe/4_hurt/H-41.png',
-        'img/2_character_pepe/4_hurt/H-42.png',
+        'img/2_character_pepe/4_hurt/H-41.png', 'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
 
@@ -80,49 +53,68 @@ class Character extends MovableObject {
         this.applyGravity();
     }
 
-    animate(){
+    animate() {
         setInterval(() => {
-            if (this.isDead() || this.world.gameEnded) {return; }
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {this.moveRight();}
+            if (this.isDead() || (this.world && this.world.gameEnded)) return;
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) { this.moveRight(); this.otherDirection = false; }
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft('character');
                 this.otherDirection = true;
             }
-            if(this.world.keyboard.UP && !this.isAboveGround()){this.jump();}
+            if (this.world.keyboard.UP && !this.isAboveGround()) {
+                this.jump();
+                this.playJumpSound();
+            }
             this.world.camera_x = -this.x + 100;
-        },1000 / 60);
+        }, 1000 / 60);
 
-        //Walk animation
         setInterval(() => {
-            if (this.world.gameEnded && !this.isDead()) return; // Block animations when game ended
+            if (this.world && this.world.gameEnded && !this.isDead()) return;
             if (this.isDead()) {
                 this.playDeadAnimationOnce();
-                return; // Block other animations when dead or game ended
+                return;
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else {this.playAnimation(this.IMAGES_IDLE);}
+                
+            } else {
+                this.jumpSoundPlayed = false;
+                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                    this.playAnimation(this.IMAGES_WALKING);
+                    this.startWalkingSound();
+                } else {
+                    this.playAnimation(this.IMAGES_IDLE);
+                    this.stopWalkingSound();
+                }
+            }
         }, 1000 / 8);
     }
 
-    animateIdle(){
-        let i = this.currentImage % this.IMAGES_IDLE.length;
-        let path = this.IMAGES_IDLE[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-    }
-
-    collectCoin(){
-        this.coins += 1;
-    }
-
-    collectBottle(){
-        if(this.bottlesInInventory < 5){
-            this.bottlesInInventory = 5;
+    startWalkingSound() {
+        if (!this.isWalking && this.world && this.world.audio) {
+            this.isWalking = true;
+            this.world.audio.walkingSound.play();
         }
     }
 
+    stopWalkingSound() {
+        if (this.isWalking && this.world && this.world.audio) {
+            this.isWalking = false;
+            this.world.audio.walkingSound.pause();
+            this.world.audio.walkingSound.currentTime = 0;
+        }
+    }
+
+    playJumpSound() {
+        this.stopWalkingSound();
+        this.world.audio.jumpingSound.currentTime = 0;
+        if (!this.jumpSoundPlayed && this.world && this.world.audio) {
+            this.jumpSoundPlayed = true;
+            this.world.audio.jumpingSound.play();
+        }
+    }
+
+    collectCoin() { this.coins += 1; }
+    collectBottle() { if (this.bottlesInInventory < 5) { this.bottlesInInventory = 5; } }
 }

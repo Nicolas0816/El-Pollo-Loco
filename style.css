@@ -1,189 +1,218 @@
 @font-face {
-    font-family: Danfo;
-    src: url(./fonts/Danfo-Regular-VariableFont_ELSH.ttf);
+  font-family: Danfo;
+  src: url(./fonts/Danfo-Regular-VariableFont_ELSH.ttf);
 }
 
 body {
-    display: flex;
-    margin: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-image: url(./img/0_page_background/desert.jpg);
-    background-size: cover;
-    background-position: center;
-    font-family: Danfo;
-    font-size: 40px;
-    color: white;
-    letter-spacing: 4px;
-    text-shadow: 0px 10px 2px rgba(0, 0, 0, 0.7);
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url(./img/0_page_background/desert.jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: Danfo;
+  font-size: 40px;
+  color: white;
+  letter-spacing: 4px;
+  text-shadow: 0px 10px 2px rgba(0, 0, 0, 0.7);
 }
 
 #game-screen {
-    position: relative;
-    width: 100%;
-    max-width: 720px;
-    aspect-ratio: 3 / 2;
-    max-height: 100vh;
-    margin: 0 auto;
+  position: relative;
+  width: min(720px, 100vw, calc(100vh * 1.5));
+  max-height: 100vh;
+  aspect-ratio: 3 / 2;
+  margin: 0 auto;
 }
 
 #game-screen canvas {
-    width: 100%;
-    height: auto;
-    max-height: 100vh;
-    display: block;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 #start-screen {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+#start-game-text {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  text-align: center;
+  font-size: 24px;
+  font-family: Danfo;
+  color: #ffd700;
+  letter-spacing: 4px;
+  text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
+  background-color: #99440a;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+#start-game-text:hover {
+  font-size: 28px;
+  cursor: pointer;
+}
+
+#restart-game-text {
+  position: absolute;
+  top: 88%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  text-align: center;
+  font-size: 18px;
 }
 
 #start-screen img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 #start-screen.hidden {
-    display: none;
+  display: none;
 }
 
-#game-over{
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.8);
-    width: 100%;
-    height: 100%;
+#game-over {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
-#you-won{
-    position: absolute;
-    inset: 0;
-    z-index: 22;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.8);
-    width: 100%;
-    height: 100%;
+#you-won {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
-#you-won img, #game-over img {
-    width: 50%;
-    height: auto;
+#you-won img,
+#game-over img {
+  width: 50%;
+  height: auto;
 }
 
-#game-over.hidden, #you-won.hidden {
-    display: none;
-}
-
-@media only screen and (max-width: 720px) {
-    canvas {
-        width: 100%;
-    }
-}
-
-@media only screen and (orientation: landscape) and (max-width: 1024px) {
-    h1 {
-        display: none;
-    }
-
-    #game-screen {
-        width: 100%;
-        max-width: 720px;
-        max-height: 100vh;
-    }
-
-    #game-screen canvas {
-        width: 100%;
-        height: auto;
-        max-height: 100vh;
-    }
-
-    #start-screen img {
-        object-fit: contain;
-        background-color: black;
-    }
-
-    #mobile-buttons.game-started {
-        display: flex; /* Zeige nur wenn Klasse vorhanden */
-    }
+#game-over.hidden,
+#you-won.hidden {
+  display: none;
 }
 
 #orientation-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(255, 255, 255); /* Dunkler Hintergrund */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Über allem anderen */
-    color: black;
-    font-family: sans-serif;
-    text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: black;
+  font-family: sans-serif;
+  text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.7);
 }
 
 #orientation-overlay.hidden {
-    display: none;
+  display: none;
 }
 
 .overlay-content {
-    text-align: center;
-    max-width: 300px;
+  text-align: center;
+  max-width: 300px;
 }
 
 .overlay-content h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .overlay-content p {
-    font-size: 16px;
-    margin-bottom: 20px;
+  font-size: 16px;
+  margin-bottom: 20px;
 }
 
 .overlay-content img {
-    width: 50px; /* Optional: Icon-Größe */
+  width: 50px;
 }
 
 #mobile-buttons {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    bottom: 8px;
-    z-index: 999;
-    display: none; /* Verstecke standardmäßig */
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 8px;
+  z-index: 999;
+  display: none;
 }
 
 #mobile-buttons.game-started {
-    /* Zusätzliche Klasse für Sichtbarkeit */
+  /* Extra Class for visibility */
 }
 
-#mobile-buttons-right, #mobile-buttons-left {
-    display: flex;
-    width: 100%;
-    gap: 12px;
+#mobile-buttons-right,
+#mobile-buttons-left {
+  display: flex;
+  width: 100%;
+  gap: 12px;
 }
 
-#mobile-buttons-right img, #mobile-buttons-left img {
-    width: 70px; /* Optional: Button-Größe */
+#mobile-buttons-right img,
+#mobile-buttons-left img {
+  width: 70px;
 }
 
 #mobile-buttons-right {
-    justify-content: flex-end;
+  justify-content: flex-end;
+}
+
+@media only screen and (max-width: 720px) {
+  #game-screen canvas {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 1024px) {
+  h1 {
+    display: none;
+  }
+
+  #game-screen canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  #start-screen img {
+    object-fit: contain;
+    background-color: black;
+  }
+
+  #mobile-buttons.game-started {
+    display: flex; /* Zeige nur wenn Klasse vorhanden */
+  }
 }

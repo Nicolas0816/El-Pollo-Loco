@@ -74,7 +74,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.speed = 0.10;
+        this.speed = 0.20;
         this.watchForCameraContact();
     }
 
@@ -103,7 +103,7 @@ class Endboss extends MovableObject {
 
    alertAnimation() {
         if (this.alertInterval) return;
-
+        this.playEndbossDialogue();
         this.alertInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_ALERT);
         }, 1000 / 6);
@@ -194,8 +194,22 @@ class Endboss extends MovableObject {
         if (this.energy < 0) this.energy = 0;
         if (this.energy > 0) {
             this.hurtAnimation();
+            this.world.audio.playEndbossHitSound();
         } else {
             this.dieAnimation();
         }
+    }
+
+    playEndbossDialogue() {
+        if (this.world.endbossDialoguePlayed) return;
+        this.world.audio.gameMusic.pause();
+        this.world.audio.gameMusic.currentTime = 0;
+        this.world.audio.gameMusicPlayed = false; // Reset flag für Game Music 
+        this.world.audio.endbossSound.play();
+        this.world.audio.endbossMusic.play();
+        this.world.audio.endbossDialoguePlayed = true;
+        this.world.audio.endbossMusic.onended = () => {
+            this.world.audio.gameMusic.play();
+        };
     }
 }

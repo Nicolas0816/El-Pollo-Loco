@@ -9,6 +9,7 @@ let jumpButton = document.getElementById('jump-button');
 let throwButton = document.getElementById('throw-button');
 
 
+
 function startGame() {
     if (gameStarted) return;
     gameStarted = true;
@@ -26,8 +27,7 @@ function init() {
     level1 = initLevel();
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
-    console.log('My character is', world.character);
-    
+    world.audio.playGameMusic();
 }
 
 document.addEventListener('keydown', (e) => {
@@ -153,3 +153,4 @@ checkOrientation();
 // Event-Listener
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
+
