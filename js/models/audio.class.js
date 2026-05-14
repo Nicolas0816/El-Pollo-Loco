@@ -20,40 +20,47 @@ class AudioMusic {
     /** @type {boolean} Whether all audio is currently muted. */
     isMuted = false;
 
-    /**
-     * Initializes all Audio objects with their respective file paths.
-     * Sets default volumes and looping properties.
-     */
+    /** Initializes all audio objects and applies default volume and loop settings. */
     constructor() {
-        /** @type {HTMLAudioElement} Sound played when the character walks. */
-        this.walkingSound = new Audio('audio/freesound_community-sand-walk-106366.mp3');
-        /** @type {HTMLAudioElement} Sound played when the character jumps. */
-        this.jumpingSound = new Audio('audio/freesound_community-cartoon-jump-6462.mp3');
-        /** @type {HTMLAudioElement} Sound played when the character takes damage. */
-        this.characterHurtSound = new Audio('audio/homemade_sfx-slap-hurt-pain-sound-effect-262618.mp3');
-        /** @type {HTMLAudioElement} Fanfare played upon winning the game. */
-        this.youWonSound = new Audio("audio/floraphonic-you-win-sequence-1-183948.mp3");
-        /** @type {HTMLAudioElement} Sound played when a coin is collected. */
-        this.collectCoinSound = new Audio("audio/liecio-collect-points-190037.mp3");
-        /** @type {HTMLAudioElement} Sound played when a bottle is collected. */
-        this.collectBottleSound = new Audio("audio/freesound_community-item-equip-6904.mp3");
-        /** @type {HTMLAudioElement} Sound played when a bottle hits an enemy. */
-        this.splashSound = new Audio('audio/stepir44-hurt-sound-435314.mp3');
-        /** @type {HTMLAudioElement} Sound played when the player loses the game. */
-        this.gameOverSound = new Audio('audio/drummusiclooper5000-lose-sfx-365579.mp3');
-        /** @type {HTMLAudioElement} Main background music. */
-        this.gameMusic = new Audio("audio/tatamusic-mexican-mexico-music-434632.mp3");
-        /** @type {HTMLAudioElement} Dramatic scream played on character death. */
-        this.characterDeathSound = new Audio("audio/u_r7cny11q7r-man-death-scream-186763.mp3");
-        /** @type {HTMLAudioElement} Voice line or growl for the endboss introduction. */
-        this.endbossSound = new Audio("audio/phatphrogstudio-demon-voice-no-mercy-477827.mp3");
-        /** @type {HTMLAudioElement} Specific background music for the endboss fight. */
-        this.endbossMusic = new Audio("audio/mfcc-mexican-mexican-mexico-mariachi-music-290633.mp3");
-        /** @type {HTMLAudioElement} Sound played when the endboss is hit. */
-        this.endbossHitSound = new Audio("audio/digitalstore07-chicken-430403.mp3");
-        /** @type {HTMLAudioElement} Sound played when the character sleeps. */
-        this.sleepingSound = new Audio("audio/audiopapkin-male-snoring-297875.mp3");
+        this.loadSounds();
+        this.configureSounds();
+    }
 
+    /** Creates all Audio instances with their respective file paths. */
+    loadSounds() {
+        this.loadCharacterSounds();
+        this.loadItemSounds();
+        this.loadBossSounds();
+    }
+
+    /** Loads sounds related to the player character. */
+    loadCharacterSounds() {
+        this.walkingSound = new Audio('audio/freesound_community-sand-walk-106366.mp3');
+        this.jumpingSound = new Audio('audio/freesound_community-cartoon-jump-6462.mp3');
+        this.characterHurtSound = new Audio('audio/homemade_sfx-slap-hurt-pain-sound-effect-262618.mp3');
+        this.characterDeathSound = new Audio("audio/u_r7cny11q7r-man-death-scream-186763.mp3");
+        this.sleepingSound = new Audio("audio/audiopapkin-male-snoring-297875.mp3");
+    }
+
+    /** Loads sounds related to item collection, bottles, and game outcome. */
+    loadItemSounds() {
+        this.collectCoinSound = new Audio("audio/liecio-collect-points-190037.mp3");
+        this.collectBottleSound = new Audio("audio/freesound_community-item-equip-6904.mp3");
+        this.splashSound = new Audio('audio/stepir44-hurt-sound-435314.mp3');
+        this.gameOverSound = new Audio('audio/drummusiclooper5000-lose-sfx-365579.mp3');
+        this.youWonSound = new Audio("audio/floraphonic-you-win-sequence-1-183948.mp3");
+    }
+
+    /** Loads sounds and music related to the endboss and background. */
+    loadBossSounds() {
+        this.gameMusic = new Audio("audio/tatamusic-mexican-mexico-music-434632.mp3");
+        this.endbossSound = new Audio("audio/phatphrogstudio-demon-voice-no-mercy-477827.mp3");
+        this.endbossMusic = new Audio("audio/mfcc-mexican-mexican-mexico-mariachi-music-290633.mp3");
+        this.endbossHitSound = new Audio("audio/digitalstore07-chicken-430403.mp3");
+    }
+
+    /** Sets volume and looping behaviour for sounds that differ from the default. */
+    configureSounds() {
         this.gameMusic.volume = 0.5;
         this.gameMusic.loop = true;
         this.sleepingSound.loop = true;

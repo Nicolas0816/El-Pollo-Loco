@@ -38,10 +38,11 @@ class World {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.collisions = new CollisionManager(this);
         this.draw();
         this.setWorld();
-        this.checkStompCollisions();
-        this.allCollisions();
+        this.collisions.checkStompCollisions();
+        this.collisions.allCollisions();
         this.checkPressedKey();
     }
 
@@ -52,34 +53,6 @@ class World {
     setWorld() {
         this.character.world = this;
         this.level.enemies.forEach((enemy) => { enemy.world = this; });
-    }
-
-    /**
-     * Starts the combined collision interval that checks enemy hits, coin/bottle collection,
-     * and bottle-to-enemy hits every 10 ms.
-     */
-    allCollisions() {
-        let intervalId = setInterval(() => {
-            if (this.gameEnded) return;
-            this.checkCollisions();
-            this.collectCoin();
-            this.chickensHitByBottle();
-            this.bottleHitsGround();
-            this.collectBottle();
-        }, 10);
-        this.intervals.push(intervalId);
-    }
-
-    /**
-     * Starts the stomp detection interval (10 ms) that checks if the character
-     * has jumped onto a MiniChicken from above.
-     */
-    checkStompCollisions() {
-        let intervalId = setInterval(() => {
-            if (this.gameEnded) return;
-            this.jumpOnEnemy();
-        }, 10);
-        this.intervals.push(intervalId);
     }
 
     /**
@@ -100,56 +73,6 @@ class World {
     getEndboss() { return this.level.enemies.find((enemy) => enemy instanceof Endboss); }
 
     /**
-     * Checks whether any enemy is colliding with the character and applies damage.
-     * Triggers the lose condition when character health reaches zero.
-     */
-    checkCollisions() {
-        this.level.enemies.forEach((enemy) => {
-            if (this.characterHit(enemy)) {
-                this.character.hit();
-                this.audio.playCharacterHurtSound();
-                this.healthBar.setPercentage(this.character.energy);
-            }
-            if (this.character.isDead()) {
-                this.endGame("lose");
-            }
-        });
-    }
-
-    /**
-     * Returns true if the enemy is alive, overlapping the character, and the character
-     * is not currently in the brief post-hit invincibility window.
-     * @param {MovableObject} enemy
-     * @returns {boolean}
-     */
-    characterHit(enemy) {
-        return !enemy.isDead() && this.character.isColliding(enemy) && !this.character.isHurt();
-    }
-
-    /**
-     * Checks for top-collision stomp on MiniChickens; kills the enemy and bounces the character.
-     */
-    jumpOnEnemy() {
-        this.level.enemies.forEach((enemy) => {
-            if (this.collideMiniChicken(enemy)) {
-                enemy.hit();
-                this.character.jump();
-                this.audio.playSplashSound();
-            }
-        });
-    }
-
-    /**
-     * Returns true when all stomp conditions are met: enemy is alive, character is
-     * falling onto its top, not hurt, and the target is a MiniChicken.
-     * @param {MovableObject} enemy
-     * @returns {boolean}
-     */
-    collideMiniChicken(enemy) {
-        return !enemy.isDead() && this.character.isCollidingOnTop(enemy) && this.character.speedY < 0 && !this.character.isHurt() && enemy instanceof MiniChicken;
-    }
-
-    /**
      * Spawns a ThrowableObject when SPACE is held and the player has bottles.
      * Deducts one bottle and updates the HUD.
      */
@@ -165,98 +88,6 @@ class World {
             this.character.bottlesInInventory -= 1;
             this.bottleBar.setPercentage(this.character.bottlesInInventory * 20);
         }
-    }
-
-    /**
-     * Checks each coin for overlap with the character, collects it, plays a sound,
-     * updates the HUD, and removes it from the level.
-     */
-    collectCoin() {
-        this.level.coins.forEach((coin) => {
-            if (this.character.isColliding(coin)) {
-                this.character.collectCoin();
-                this.audio.playCollectCoinSound();
-                this.coinBar.setPercentage(this.character.coins * 10);
-                const index = this.level.coins.indexOf(coin);
-                if (index > -1) this.level.coins.splice(index, 1);
-            }
-        });
-    }
-
-    /**
-     * Checks each ground bottle for overlap with the character, collects it when the
-     * inventory is not full, plays a sound, updates the HUD, and removes it from the level.
-     */
-    collectBottle() {
-        this.level.collectableBottles.forEach((bottle) => {
-            if (this.character.isColliding(bottle) && this.character.bottlesInInventory < 5) {
-                this.character.collectBottle();
-                this.audio.playCollectBottleSound();
-                this.bottleBar.setPercentage(this.character.bottlesInInventory * 20);
-                const index = this.level.collectableBottles.indexOf(bottle);
-                if (index > -1) this.level.collectableBottles.splice(index, 1);
-            }
-        });
-    }
-
-    /**
-     * Checks every in-flight bottle against every living enemy (Chicken or Endboss).
-     * On collision, stops the bottle, triggers splash, hits the enemy, and updates the endboss HUD.
-     * Ends the game with a win if the endboss dies.
-     */
-    chickensHitByBottle() {
-        this.level.bottle.forEach((bottle) => {
-            this.level.enemies.forEach((enemy) => {
-                if (!enemy.isDead() && bottle.isColliding(enemy) && !bottle.isSplashing && (enemy instanceof Chicken || enemy instanceof Endboss)) {
-                    this.handleBittleOnCollision(bottle, enemy);
-                    if (enemy instanceof Endboss) {
-                        const percentage = Math.max(0, (enemy.energy / 500) * 100);
-                        this.endbossHealthBar.setPercentage(percentage);
-                        if (enemy.isDead()) this.endGame("win");
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * Handles the moment a bottle contacts an enemy: stops the bottle,
-     * plays the splash animation, hits the enemy, and plays the splash sound.
-     * @param {ThrowableObject} bottle
-     * @param {MovableObject} enemy
-     */
-    handleBittleOnCollision(bottle, enemy) {
-        bottle.stopBottle();
-        bottle.splashAnimation(() => this.removeBottleFromInventory(bottle));
-        enemy.hit();
-        this.audio.playSplashSound();
-    }
-
-    /**
-     * Handles the moment a bottle contacts the ground: stops the bottle,
-     * plays the splash animation, and plays the splash sound.
-     * @param {ThrowableObject} bottle
-     */
-    bottleHitsGround() {
-        this.level.bottle.forEach((bottle) => {
-            if (!bottle.isSplashing && bottle.y + bottle.height >= 400) {
-                bottle.stopBottle();
-                bottle.splashAnimation(() => this.removeBottleFromInventory(bottle));
-                this.audio.playSplashSound();
-            }
-        });
-    }
-
-    /**
-     * Removes a bottle from the active bottle array after a short delay,
-     * giving the splash animation time to finish.
-     * @param {ThrowableObject} bottle
-     */
-    removeBottleFromInventory(bottle) {
-        setTimeout(() => {
-            const bottleIndex = this.level.bottle.indexOf(bottle);
-            if (bottleIndex > -1) this.level.bottle.splice(bottleIndex, 1);
-        }, 250);
     }
 
     /**
