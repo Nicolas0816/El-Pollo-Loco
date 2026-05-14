@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>El Pollo Loco</title>
-
+    <link rel="icon" type="image/x-icon" href="img/6_salsa_bottle/2_salsa_bottle_on_ground.png">
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -13,21 +13,48 @@
     <div id="game-screen">
       <div id="start-screen">
         <button onclick="startGame()" id="start-game-text">Click to start</button>
+        <button onclick="showInstructions()" id="instructions-button">How to play</button>
+        <a href="impressum.html" target="_blank" id="imprint-button">Imprint</a>
         <img
           src="./img/9_intro_outro_screens/start/startscreen_1.png"
           alt="start-screen"
         />
       </div>
 
+      <div id="instructions-overlay" class="hidden">
+        <div id="instructions-content">
+          <h2>How to Play</h2>
+          <ul>
+            <li><span class="key">&#8592;</span><span class="key">&#8594;</span> Move</li>
+            <li><span class="key">&#8593;</span> Jump</li>
+            <li><span class="key">Space</span> Throw bottle</li>
+            <li>Jump on little chicks to stomp them</li>
+            <li>Throw bottles on chickens to kill them</li>
+            <li>Collect coins</li>
+            <li>Collect bottles to throw at enemies. (Be careful when you pick up the Bottles. The max number of bottles in your stash is 5.)</li>
+            <li>Defeat the Endboss by throwing bottles on it to win!</li>
+          </ul>
+          <button onclick="closeInstructions()" id="close-instructions-button">Close</button>
+        </div>
+      </div>
+
       <canvas id="canvas" width="720" height="480"> </canvas>
 
-      <div onclick="restartGame()" id="game-over" class="hidden">
-        <p id="restart-game-text">Click to restart</p>
+      <button id="mute-button" class="hidden" onclick="toggleMute()">Mute</button>
+
+      <div id="game-over" class="hidden">
         <img src="./img/You won, you lost/Game over A.png" alt="Game Over" />
+        <div class="end-screen-buttons">
+          <button onclick="playAgain()">Play Again</button>
+          <button onclick="restartGame()">Main Menu</button>
+        </div>
       </div>
-      <div onclick="restartGame()" id="you-won" class="hidden">
-        <p id="restart-game-text">Click to restart</p>
+      <div id="you-won" class="hidden">
         <img src="./img/You won, you lost/You won A.png" alt="You Won" />
+        <div class="end-screen-buttons">
+          <button onclick="playAgain()">Play Again</button>
+          <button onclick="restartGame()">Main Menu</button>
+        </div>
       </div>
     </div>
 
@@ -40,20 +67,12 @@
 
     <div id="mobile-buttons">
       <div id="mobile-buttons-left">
-        <img id="left-button" src="./img/mobile_buttons/left.png" alt="Left" />
-        <img
-          id="right-button"
-          src="./img/mobile_buttons/right.png"
-          alt="Right"
-        />
+        <img id="left-button" src="./img/mobile_buttons/left.png" alt="Left" draggable="false" />
+        <img id="right-button" src="./img/mobile_buttons/right.png" alt="Right" draggable="false" />
       </div>
       <div id="mobile-buttons-right">
-        <img id="jump-button" src="./img/mobile_buttons/jump.png" alt="Jump" />
-        <img
-          id="throw-button"
-          src="./img/mobile_buttons/throw.png"
-          alt="Throw"
-        />
+        <img id="jump-button" src="./img/mobile_buttons/jump.png" alt="Jump" draggable="false" />
+        <img id="throw-button" src="./img/mobile_buttons/throw.png" alt="Throw" draggable="false" />
       </div>
     </div>
 

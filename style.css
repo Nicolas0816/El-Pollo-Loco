@@ -1,6 +1,10 @@
 @font-face {
-  font-family: Danfo;
-  src: url(./fonts/Danfo-Regular-VariableFont_ELSH.ttf);
+  font-family: Cherry;
+  src: url(fonts/CherryCreamSoda-Regular.ttf);
+}
+
+h1 {
+  margin-block-start: 0;
 }
 
 body {
@@ -10,10 +14,11 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  overflow: hidden;
   background-image: url(./img/0_page_background/desert.jpg);
   background-size: cover;
   background-position: center;
-  font-family: Danfo;
+  font-family: Cherry;
   font-size: 40px;
   color: white;
   letter-spacing: 4px;
@@ -81,6 +86,147 @@ body {
   display: none;
 }
 
+#instructions-button {
+  position: absolute;
+  top: 92%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  text-align: center;
+  font-size: 18px;
+  font-family: Danfo;
+  color: #ffd700;
+  letter-spacing: 4px;
+  text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
+  background-color: #99440a;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+#instructions-button:hover {
+  font-size: 20px;
+}
+
+#imprint-button {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  z-index: 11;
+  font-size: 12px;
+  font-family: Danfo;
+  color: #ffd700;
+  letter-spacing: 2px;
+  text-shadow: none;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+#imprint-button:hover {
+  opacity: 1;
+}
+
+#instructions-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+#instructions-overlay.hidden {
+  display: none;
+}
+
+#instructions-content {
+  background-color: #99440a;
+  border-radius: 12px;
+  padding: 24px 32px;
+  text-align: center;
+  color: #ffd700;
+  font-family: Danfo;
+  letter-spacing: 2px;
+  max-width: 80%;
+}
+
+#instructions-content h2 {
+  font-size: 22px;
+  margin: 0 0 16px;
+  text-shadow: none;
+}
+
+#instructions-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 14px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-shadow: none;
+}
+
+.key {
+  display: inline-block;
+  background-color: #ffd700;
+  color: #99440a;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 12px;
+  margin-right: 4px;
+  font-family: sans-serif;
+  font-weight: bold;
+  letter-spacing: 0;
+}
+
+#close-instructions-button {
+  font-family: Danfo;
+  font-size: 16px;
+  color: #99440a;
+  background-color: #ffd700;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 16px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: background-color 0.2s ease;
+}
+
+#close-instructions-button:hover {
+  background-color: #ffdf33;
+}
+
+#mute-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 15;
+  font-family: Danfo;
+  font-size: 14px;
+  color: #ffd700;
+  background-color: #99440a;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: background-color 0.2s ease;
+}
+
+#mute-button:hover {
+  background-color: #b85510;
+}
+
+#mute-button.hidden {
+  display: none;
+}
+
 #game-over {
   position: absolute;
   inset: 0;
@@ -89,10 +235,44 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
   background-color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: 100%;
+}
+
+.end-screen-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.end-screen-buttons button {
+  font-family: Danfo;
+  font-size: 16px;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.end-screen-buttons button:first-child {
+  color: #99440a;
+  background-color: #ffd700;
+}
+
+.end-screen-buttons button:first-child:hover {
+  background-color: #ffdf33;
+}
+
+.end-screen-buttons button:last-child {
+  color: #ffd700;
+  background-color: #99440a;
+}
+
+.end-screen-buttons button:last-child:hover {
+  background-color: #b85510;
 }
 
 #you-won {
@@ -103,10 +283,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
   background-color: rgba(0, 0, 0, 0.8);
   width: 100%;
   height: 100%;
-  cursor: pointer;
 }
 
 #you-won img,
@@ -170,8 +350,8 @@ body {
   display: none;
 }
 
-#mobile-buttons.game-started {
-  /* Extra Class for visibility */
+.touch-device #mobile-buttons.game-started {
+  display: flex;
 }
 
 #mobile-buttons-right,
@@ -184,6 +364,9 @@ body {
 #mobile-buttons-right img,
 #mobile-buttons-left img {
   width: 70px;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 #mobile-buttons-right {
@@ -212,7 +395,7 @@ body {
     background-color: black;
   }
 
-  #mobile-buttons.game-started {
-    display: flex; /* Zeige nur wenn Klasse vorhanden */
+  #mobile-buttons {
+    display: none;
   }
 }

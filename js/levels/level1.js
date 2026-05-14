@@ -1,3 +1,8 @@
+/**
+ * Builds and returns a fully populated Level 1 instance containing all enemies,
+ * clouds, background layers, coins, bottles, and collectable bottles.
+ * @returns {Level}
+ */
 function initLevel() {
   return new Level(
     [ new MiniChicken(),
@@ -95,4 +100,5 @@ function initLevel() {
   );
 }
 
+/** @type {Level} The active level 1 instance used by the World. */
 let level1 = initLevel();
