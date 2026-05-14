@@ -32,7 +32,7 @@ class Endboss extends MovableObject {
     };
 
     /** @type {number} Health points of the endboss. */
-    energy = 500;
+    energy = 1000;
 
     /** @type {string[]} Images for the walking animation. */
     IMAGES_WALKING = [

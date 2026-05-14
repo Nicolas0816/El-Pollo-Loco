@@ -14,7 +14,7 @@
       <div id="start-screen">
         <button onclick="startGame()" id="start-game-text">Click to start</button>
         <button onclick="showInstructions()" id="instructions-button">How to play</button>
-        <a href="impressum.html" target="_blank" id="imprint-button">Imprint</a>
+        <button onclick="showImprint()" id="imprint-button">Imprint</button>
         <img
           src="./img/9_intro_outro_screens/start/startscreen_1.png"
           alt="start-screen"
@@ -35,6 +35,25 @@
             <li>Defeat the Endboss by throwing bottles on it to win!</li>
           </ul>
           <button onclick="closeInstructions()" id="close-instructions-button">Close</button>
+        </div>
+      </div>
+
+      <div id="imprint-overlay" class="hidden">
+        <div id="imprint-content">
+          <h2>Imprint</h2>
+          <h3>Information according to § 5 TMG</h3>
+          <p><strong>EL POLLO LOCO</strong><br />Developed by Nicolas Kiss<br />Büttenenhalde<br />6006 Luzern<br />Switzerland</p>
+          <p>Email: <a href="mailto:kissnicolas@hotmail.com">kissnicolas@hotmail.com</a></p>
+          <h3>Responsible for Content</h3>
+          <p>Nicolas Kiss<br />Büttenenhalde<br />6006 Luzern<br />Switzerland</p>
+          <h3>Disclaimer</h3>
+          <p>The contents of this game were created with great care. However, no guarantee can be given for the accuracy, completeness, or timeliness of the content.</p>
+          <p>This game may contain links to external websites of third parties. We have no influence over the content of those websites and therefore cannot accept any liability for them.</p>
+          <h3>Copyright</h3>
+          <p>The content and works created by the developer are subject to copyright law. Duplication, processing, or distribution outside the limits of copyright law requires written permission.</p>
+          <h3>Image and Audio Credits</h3>
+          <p>Images, sounds, and music used are either self-created or taken from royalty-free platforms (Pixabay). All rights belong to their respective owners.</p>
+          <button onclick="closeImprint()" id="close-imprint-button">Close</button>
         </div>
       </div>
 

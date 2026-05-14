@@ -142,7 +142,7 @@ class CollisionManager {
      * @param {Endboss} endboss
      */
     handleEndbossHit(endboss) {
-        const percentage = Math.max(0, (endboss.energy / 500) * 100);
+        const percentage = Math.max(0, (endboss.energy / 1000) * 100);
         this.world.endbossHealthBar.setPercentage(percentage);
         if (endboss.isDead()) this.world.endGame("win");
     }

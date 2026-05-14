@@ -176,6 +176,16 @@ function restartGame() {
     if (startScreen) startScreen.classList.remove('hidden');
 }
 
+/** Opens the imprint overlay. */
+function showImprint() {
+    document.getElementById('imprint-overlay').classList.remove('hidden');
+}
+
+/** Closes the imprint overlay. */
+function closeImprint() {
+    document.getElementById('imprint-overlay').classList.add('hidden');
+}
+
 /** Hides the game-over and you-won overlay elements. */
 function hideOverlays() {
     const gameOver = document.getElementById('game-over');

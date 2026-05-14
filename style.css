@@ -53,7 +53,7 @@ body {
   z-index: 11;
   text-align: center;
   font-size: 24px;
-  font-family: Danfo;
+  font-family: Cherry;
   color: #ffd700;
   letter-spacing: 4px;
   text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
@@ -94,7 +94,7 @@ body {
   z-index: 11;
   text-align: center;
   font-size: 18px;
-  font-family: Danfo;
+  font-family: Cherry;
   color: #ffd700;
   letter-spacing: 4px;
   text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
@@ -115,18 +115,86 @@ body {
   bottom: 4px;
   right: 8px;
   z-index: 11;
-  font-size: 12px;
-  font-family: Danfo;
+  font-size: 16px;
+  font-family: Cherry;
   color: #ffd700;
   letter-spacing: 2px;
   text-shadow: none;
-  text-decoration: none;
+  background: none;
+  border: none;
   opacity: 0.7;
+  cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
 #imprint-button:hover {
   opacity: 1;
+}
+
+#imprint-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.85);
+  overflow-y: auto;
+  padding: 24px 0;
+}
+
+#imprint-overlay.hidden {
+  display: none;
+}
+
+#imprint-content {
+  background-color: #99440a;
+  border-radius: 12px;
+  padding: 24px 32px;
+  color: #ffd700;
+  font-family: Cherry;
+  font-size: 16px;
+  letter-spacing: 1px;
+  max-width: 80%;
+  width: 100%;
+  text-shadow: none;
+}
+
+#imprint-content h2 {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+
+#imprint-content h3 {
+  font-size: 16px;
+  margin: 16px 0 6px;
+}
+
+#imprint-content p {
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+
+#imprint-content a {
+  color: #ffd700;
+}
+
+#close-imprint-button {
+  font-family: Cherry;
+  font-size: 16px;
+  color: #99440a;
+  background-color: #ffd700;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 16px;
+  margin-top: 16px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: background-color 0.2s ease;
+}
+
+#close-imprint-button:hover {
+  background-color: #ffdf33;
 }
 
 #instructions-overlay {
@@ -149,7 +217,7 @@ body {
   padding: 24px 32px;
   text-align: center;
   color: #ffd700;
-  font-family: Danfo;
+  font-family: Cherry;
   letter-spacing: 2px;
   max-width: 80%;
 }
@@ -164,7 +232,7 @@ body {
   list-style: none;
   padding: 0;
   margin: 0 0 20px;
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -178,7 +246,7 @@ body {
   color: #99440a;
   border-radius: 4px;
   padding: 1px 6px;
-  font-size: 12px;
+  font-size: 16px;
   margin-right: 4px;
   font-family: sans-serif;
   font-weight: bold;
@@ -186,7 +254,7 @@ body {
 }
 
 #close-instructions-button {
-  font-family: Danfo;
+  font-family: Cherry;
   font-size: 16px;
   color: #99440a;
   background-color: #ffd700;
@@ -207,8 +275,8 @@ body {
   top: 10px;
   right: 10px;
   z-index: 15;
-  font-family: Danfo;
-  font-size: 14px;
+  font-family: Cherry;
+  font-size: 16px;
   color: #ffd700;
   background-color: #99440a;
   border: none;
@@ -247,7 +315,7 @@ body {
 }
 
 .end-screen-buttons button {
-  font-family: Danfo;
+  font-family: Cherry;
   font-size: 16px;
   letter-spacing: 2px;
   border: none;
@@ -388,11 +456,6 @@ body {
   #game-screen canvas {
     width: 100%;
     height: 100%;
-  }
-
-  #start-screen img {
-    object-fit: contain;
-    background-color: black;
   }
 
   #mobile-buttons {

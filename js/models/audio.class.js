@@ -150,7 +150,7 @@ class AudioMusic {
             this.youWonSound, this.collectCoinSound, this.collectBottleSound,
             this.splashSound, this.gameOverSound, this.gameMusic,
             this.characterDeathSound, this.endbossSound, this.endbossMusic,
-            this.endbossHitSound
+            this.endbossHitSound, this.sleepingSound
         ];
         allSounds.forEach(sound => sound.muted = this.isMuted);
         return this.isMuted;
